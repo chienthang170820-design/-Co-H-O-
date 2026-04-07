@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>DỰ ÁN STEM: MÔ HÌNH PHỨC CHẤT [Co(H₂O)₆]²⁺</title>
+    
+    <link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+        #header {
+            background-color: #b03060; 
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        #glowscript {
+            width: 100vw;
+            height: calc(100vh - 45px);
+        }
+        
+        #toggle-btn {
+            position: absolute;
+            top: 60px;
+            left: 15px;
+            z-index: 20;
+            background-color: #b03060;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        #info-box {
+            position: absolute;
+            top: 105px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #b03060;
+            border-radius: 8px;
+            padding: 12px 15px;
+            max-width: 300px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            z-index: 10;
+            font-size: 13px;
+            color: #2c3e50;
+        }
+        #info-box h3 {
+            margin: 0 0 8px 0;
+            color: #b03060;
+            font-size: 15px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        #info-box ul { list-style: none; padding: 0; margin: 0; }
+        #info-box li { margin-bottom: 6px; }
+        #info-box b { color: #d02090; }
+        
+        #tutorial {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 10;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">DỰ ÁN STEM: MÔ HÌNH PHỨC CHẤT [Co(H₂O)₆]²⁺</div>
+    
+    <button id="toggle-btn">✕ Ẩn thông tin</button>
+
+    <div id="info-box">
+        <h3>THÔNG TIN PHỨC CHẤT</h3>
+        <ul>
+            <li>• <b>Công thức:</b> [Co(H₂O)₆]²⁺</li>
+            <li>• <b>Cầu nội:</b> [Co(H₂O)₆]²⁺</li>
+            <li>• <b>Cầu ngoại:</b> Cl⁻, SO₄²⁻...</li>
+            <li>• <b>Nguyên tử trung tâm:</b> Co²⁺</li>
+            <li>• <b>Phối tử:</b> H₂O (Nước)</li>
+            <li>• <b>Số phối trí:</b> 6 (Bát diện)</li>
+            <li>• <b>Màu sắc:</b> Hồng đỏ (Hồng đào)</li>
+            <li>• <b>Đặc điểm:</b> Cặp e của O phối trí vào Co²⁺</li>
+            <li>• <b>Ứng dụng:</b> Thử độ ẩm, nhận biết nước.</li>
+        </ul>
+    </div>
+
+    <div id="tutorial">📱 Xoay 1 ngón | Phóng to 2 ngón</div>
+
+    <div id="glowscript" class="glowscript"></div>
+
+    <script type="text/javascript">
+        window.__context = { glowscript_container: $("#glowscript") };
+
+        async function main() {
+            var scene = canvas({
+                width: window.innerWidth,
+                height: window.innerHeight - 45,
+                center: vec(0,0,0),
+                background: color.white
+            });
+
+            // Đặt camera ở góc để thấy rõ mô hình 3D bát diện
+            scene.camera.pos = vec(7, 5, 7);
+            scene.camera.axis = vec(-7, -5, -7);
+
+            // 1. VẼ NGUYÊN TỬ TRUNG TÂM Co2+
+            var co = sphere({pos: vec(0,0,0), radius: 0.9, color: vec(0.7, 0.1, 0.3)});
+            label({pos: vec(0, 0.9, 0), text: 'Co²⁺', yoffset: 15, height: 16, color: color.black, box: false});
+
+            // 2. KHAI BÁO TỌA ĐỘ TĨNH CHO 6 PHỐI TỬ H2O (Tránh lỗi toán học vector)
+            var d = 3.5;   // Khoảng cách từ tâm đến Oxy
+            var ho = 0.5;  // Độ nhô ra của Hidro
+            var hs = 0.6;  // Độ tẽ ra hai bên của Hidro
+
+            var h2o_molecules = [
+                // Phía Trục X+ và X-
+                { o: vec(d, 0, 0),  h1: vec(d+ho, hs, 0),  h2: vec(d+ho, -hs, 0) },
+                { o: vec(-d, 0, 0), h1: vec(-d-ho, hs, 0), h2: vec(-d-ho, -hs, 0) },
+                // Phía Trục Y+ và Y-
+                { o: vec(0, d, 0),  h1: vec(hs, d+ho, 0),  h2: vec(-hs, d+ho, 0) },
+                { o: vec(0, -d, 0), h1: vec(hs, -d-ho, 0), h2: vec(-hs, -d-ho, 0) },
+                // Phía Trục Z+ và Z-
+                { o: vec(0, 0, d),  h1: vec(hs, 0, d+ho),  h2: vec(-hs, 0, d+ho) },
+                { o: vec(0, 0, -d), h1: vec(hs, 0, -d-ho), h2: vec(-hs, 0, -d-ho) }
+            ];
+
+            // 3. VÒNG LẶP VẼ PHỐI TỬ
+            for (var i = 0; i < h2o_molecules.length; i++) {
+                var mol = h2o_molecules[i];
+
+                // Vẽ liên kết Co - O
+                cylinder({ pos: vec(0,0,0), axis: mol.o, radius: 0.1, color: vec(0.8, 0.6, 0.6), opacity: 0.5 });
+
+                // Vẽ nguyên tử O
+                sphere({ pos: mol.o, radius: 0.6, color: color.red });
+                label({ pos: mol.o, text: 'O', yoffset: 15, height: 12, color: color.black, box: false });
+
+                // Vẽ nguyên tử H1 và liên kết O-H1
+                sphere({ pos: mol.h1, radius: 0.25, color: color.white });
+                cylinder({ pos: mol.o, axis: vec(mol.h1.x - mol.o.x, mol.h1.y - mol.o.y, mol.h1.z - mol.o.z), radius: 0.05, color: color.gray(0.8) });
+
+                // Vẽ nguyên tử H2 và liên kết O-H2
+                sphere({ pos: mol.h2, radius: 0.25, color: color.white });
+                cylinder({ pos: mol.o, axis: vec(mol.h2.x - mol.o.x, mol.h2.y - mol.o.y, mol.h2.z - mol.o.z), radius: 0.05, color: color.gray(0.8) });
+            }
+
+            while (true) {
+                await rate(30);
+            }
+        }
+
+        $(document).ready(function() {
+            $('#toggle-btn').click(function() {
+                var infoBox = $('#info-box');
+                if (infoBox.is(':visible')) {
+                    infoBox.fadeOut(200);
+                    $(this).text('☰ Hiện thông tin');
+                } else {
+                    infoBox.fadeIn(200);
+                    $(this).text('✕ Ẩn thông tin');
+                }
+            });
+
+            main();
+        });
+    </script>
+</body>
+</html>
